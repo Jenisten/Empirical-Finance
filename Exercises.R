@@ -33,15 +33,19 @@ Box.test(ex_1$excess_return, lag = 26, type = "Ljung-Box")
 
 # Exercice 3.3
 
-r_it <- ts(ex_1$energy, start = 2, end = 15210, frequency = 1)
-f1 <- ts(ex_1$f1, start = 2, end = 15210, frequency = 1)
-f2 <- ts(ex_1$f2, start = 2, end = 15210, frequency = 1)
-f3 <- ts(ex_1$f3, start = 2, end = 15210, frequency = 1)
+r_it <- ex_1$energy
+f1 <- ex_1$f1
+f2 <- ex_1$f2
+f3 <- ex_1$f3
 
 
 # Contructing the linear regression models
 model <- lm (r_it ~ f1 + f2 + f3)
+
 summary(model)
+
+Ab_ret = model$coefficients[1] + model$residuals
+print(mean(Ab_ret))
 
 # Extract the intercept
 intercept <- model$coefficients[1]
