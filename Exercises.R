@@ -5,7 +5,7 @@ lapply(c("car", "lmtest", "sandwich", "tseries", "quantmod", "PortfolioAnalytics
 # Read excel file
 ex_1 <- read_excel("exercise 1 data.xlsx")
 print(head(ex_1))
-
+ts.plot(ex_1$energy)
 # Exersice 1.a
 # Should be 0 on average.
 
