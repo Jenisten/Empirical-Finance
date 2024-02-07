@@ -47,8 +47,4 @@ summary(model)
 intercept <- model$coefficients[1]
 print(intercept)
 
-# Calculate mean of intercept
-mean_intercept <- mean(intercept)
-print(mean_intercept)
-
-Box.test(model$residuals)
+# Abnormal returns is the sum of the intercept and the shocks (residuals). 
