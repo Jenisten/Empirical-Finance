@@ -23,11 +23,13 @@ ex_1$excess_return <- ex_1$energy - ex_1$rf
 print(head(ex_1))
 
 # Calculate mean of excess return
+mean(ex_1$energy)
 mean_excess_return <- mean(ex_1$excess_return)
 print(mean_excess_return)
 
 # Exercice 3.2
-Box.test(ex_1$excess_return)
+Box.test(ex_1$excess_return, lag = 26, type = "Ljung-Box")
+# we can reject the null hypothesis that the data is white noise. (p-value < 0.05).
 
 # Exercice 3.3
 
