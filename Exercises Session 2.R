@@ -56,14 +56,14 @@ kvec <- c(2,5,10)
 Lo.Mac(log_ret,kvec)
 
 #                           M1        M2
-#Variance ratio = 2  2.9107230 2.2596853 - We reject the null here because > 1.96
-#Variance ratio = 5  1.0578006 0.8848846 - We do not reject the null here because < 1.96 
-#Variance ratio = 10 0.1339781 0.1124738 - We do not reject the null here because < 1.96 
+# Variance ratio = 2  2.9107230 2.2596853 - We reject the null here because > 1.96
+# Variance ratio = 5  1.0578006 0.8848846 - We do not reject the null here because < 1.96
+# Variance ratio = 10 0.1339781 0.1124738 - We do not reject the null here because < 1.96
 
 # Most appropriate would be to reject RW1 and RW3 because we also reject in the Ljung test and we have limited data (261 observations)
 
-#3f
-model = arima(log_ret, order = c(1,0,0) # (1,0,0) We only change first and third. Middle is always 0.
+# 3f
+model = arima(log_ret, order = c(1, 0, 0)) # (1,0,0) We only change first and third. Middle is always 0.
 print(model)
 #Coefficients:
  #     intercept
