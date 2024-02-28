@@ -37,9 +37,9 @@ Box.test(ex_4_s, type = "Ljung-Box")
 Lo.Mac(ex_4_s, kvec)
 
 #                           M1        M2
-# Variance ratio = 2  0.1776086 0.740031 - We do not reject the null here because < 1.96
-# Variance ratio = 3  0.9130378 1.345675 - We do not reject the null here because < 1.96
-# Variance ratio = 5  1.4281379 1.703849 - We do not reject the null here because < 1.96
+# Variance ratio = 2  3.395908 3.306509 - We do reject the null here because > 1.96
+# Variance ratio = 3  4.986695 3.746806 - We do reject the null here because > 1.96
+# Variance ratio = 5  6.961240 4.567463 - We do reject the null here because > 1.96
 
 #3.5 
 ArchTest(ex_4, lags = 4, demean = TRUE)
