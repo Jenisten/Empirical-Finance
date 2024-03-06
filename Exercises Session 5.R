@@ -3,8 +3,9 @@ rm(list = ls())
 #install.packages("vrtest")
 #install.packages("forecast")
 #install.packages("FinTS")
+#install.packages("rugarch")
 
-lapply(c("car", "lmtest", "sandwich", "tseries", "quantmod", "PortfolioAnalytics", "ROI.plugin.quadprog", "readxl", "zoo", "vrtest", "forecast", "FinTS"), library, character.only = TRUE)
+lapply(c("car", "lmtest", "sandwich", "tseries", "quantmod", "PortfolioAnalytics", "ROI.plugin.quadprog", "readxl", "zoo", "vrtest", "forecast", "FinTS", "rugarch"), library, character.only = TRUE)
 
 ex_5 <- read_excel("exercise 5 data OMXC25.xlsx")
 ex_5 <- ts(ex_5)
@@ -12,6 +13,9 @@ ts.plot(ex_5, start = 1, end = 1003, frequency = 1)
 #Printing the head and tail of the data
 print(head(ex_5))
 print(tail(ex_5))
+#creating GARCH model specs
+spec <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1,1)), mean.model = list(armaOrder = c(0,0), include.mean = TRUE), distribution.model = "norm")
+
 # Assuming the data is log returns.
 
 # 3.1
