@@ -8,7 +8,7 @@ lapply(c("car", "lmtest", "sandwich", "tseries", "quantmod", "PortfolioAnalytics
 
 ex_5 <- read_excel("exercise 5 data OMXC25.xlsx")
 ex_5 <- ts(ex_5)
-ts.plot(ex_5)
+ts.plot(ex_5, start = 1, end = 1003, frequency = 1)
 #Printing the head and tail of the data
 print(head(ex_5))
 print(tail(ex_5))
@@ -47,3 +47,13 @@ Lo.Mac(ex_4_s, kvec)
 ArchTest(ex_4, lags = 4, demean = TRUE)
 ArchTest(ex_4, lags = 8, demean = TRUE)
 ArchTest(ex_4, lags = 12, demean = TRUE)
+
+# 3.6
+
+# 3.7
+
+# 3.8
+
+# 3.9
+
+# 3.10
