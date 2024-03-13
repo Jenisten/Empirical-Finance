@@ -8,15 +8,33 @@ rm(list = ls())
 lapply(c("car", "lmtest", "sandwich", "tseries", "quantmod", "PortfolioAnalytics", "ROI.plugin.quadprog", "readxl", "zoo", "vrtest", "forecast", "FinTS", "rugarch"), library, character.only = TRUE)
 
 ex_5 <- read_excel("exercise 5 data OMXC25.xlsx")
-ex_5 <- ts(ex_5)
-ts.plot(ex_5, start = 1, end = 1003, frequency = 1)
+ts_5 <- ts(ex_5)
+ts.plot(ts_5, start = 1, end = 1003, frequency = 1)
 #Printing the head and tail of the data
-print(head(ex_5))
-print(tail(ex_5))
+print(head(ts_5))
+print(tail(ts_5))
+# Assuming the data is log returns.
+
 #creating GARCH model specs
 spec <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1,1)), mean.model = list(armaOrder = c(0,0), include.mean = TRUE), distribution.model = "norm")
 
-# Assuming the data is log returns.
+#Testing the model
+fit <- ugarchfit(spec, ts_5)
+print(fit)
+# mu is the mean
+# omega is the constant
+# alpha1 is the garch coefficient or the reaction to shocks
+# beta1 is the arch coefficient or the importance of persistency. 
+# sigma is the standard deviation of the residuals.
+
+# sign bias test is to test for leverage effect.
+# The null hypothesis is that there is no leverage effect.
+
+# It is important to focus on the following tests in the results: 
+# Weighted Ljung-Box Test on Standardized Residuals
+# Weighted Ljung-Box Test on Standardized Squared Residuals
+# Weighted ARCH LM Test
+# Sign Bias Test
 
 # 3.1
 Acf(ex_4, main = "ACF of log returns") # lag 6 is above the CI. But could be an error.
