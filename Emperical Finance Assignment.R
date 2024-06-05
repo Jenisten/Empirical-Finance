@@ -70,7 +70,9 @@ logrets_ts = ts(logrets$logreturns, start = 1, end = 1000, frequency = 1)
 logrets_sq <- logrets_ts^2
 
 # Determining the amount of lags
-logrets_lags=10*log10(length(logrets_ts))
+logrets_lenght = length(logrets_ts)
+logrets_lenght
+logrets_lags=10*log10(logrets_lenght)
 print(logrets_lags)
 
 # Testing for linear predictability with a Ljung Box test
@@ -129,24 +131,31 @@ infocriteria(model2)
 #Hannan-Quinn 5.456537  5.424389
 #The second model is better than the first model because it has lower information criteria values. 
 
+# Set up rolling forecast for the first model
+roll1 <- ugarchroll(spec1, data = logrets_ts, n.ahead = 1, forecast.length = (length(logrets_ts) - 300), refit.window = "recursive", solver = "hybrid")
+roll1
 
-#Question 2.13
-# Setting up rolling forecast starting at t = 300 for both models
-roll_model1 <- ugarchroll(spec1, logrets_ts, n.ahead = 1, forecast.length = (length(logrets_ts) - 300), refit.every = 1, refit.window = "recursive", calculate.VaR = TRUE, VaR.alpha = 0.05)
-roll_model2 <- ugarchroll(spec2, logrets_ts, n.ahead = 1, forecast.length = (length(logrets_ts) - 300), refit.every = 1, refit.window = "recursive", calculate.VaR = TRUE, VaR.alpha = 0.05)
+# Extract VaR forecasts for the first model at 5%
+VaR1 <- roll1@forecast$VaR[,1]  # Extract the 5% VaR forecasts
+VaR1
 
-# Extract VaR forecasts
-VaR1 <- roll_model1@forecast$VaR[,"alpha(5%)"]
-VaR2 <- roll_model2@forecast$VaR[,"alpha(5%)"]
+# Set up rolling forecast for the second model
+roll2 <- ugarchroll(spec2, data = logrets_ts, n.ahead = 1, forecast.length = (length(logrets_ts) - 300), refit.window = "recursive", solver = "hybrid")
+roll2
 
-# Print VaR forecasts
-print(head(VaR1))
-print(head(VaR2))
+# Extract VaR forecasts for the second model at 5%
+VaR2 <- roll2@forecast$VaR[,1]  # Extract the 5% VaR forecasts
+VaR2
 
-# Evaluate VaR performance using VaRTest function
-VaR_test1 <- VaRTest(alpha = 0.05, actual = logrets_ts[301:length(logrets_ts)], VaR = VaR1)
-VaR_test2 <- VaRTest(alpha = 0.05, actual = logrets_ts[301:length(logrets_ts)], VaR = VaR2)
+# Perform VaR test for the first model
+actual_returns <- tail(logrets_ts, length(VaR1))  # Get actual returns corresponding to VaR forecasts
+VaRTest(alpha = 0.05, actual = actual_returns, VaR = VaR1)
+# The unconditional coverage null hypothesis (H0) that the model correctly predicts the frequency of exceedances is rejected. 
+# The conditional coverage null hypothesis (H0) that the model correctly predicts the frequency and independence of exceedances is also rejected.
+# This suggests that the model does not provide a well-specified VaR forecast.
 
-# Print VaR test results
-print(VaR_test1)
-print(VaR_test2)
+# Perform VaR test for the second model
+VaRTest(alpha = 0.05, actual = actual_returns, VaR = VaR2)
+# The unconditional coverage null hypothesis (H0) that the model correctly predicts the frequency of exceedances is rejected. 
+# The conditional coverage null hypothesis (H0) that the model correctly predicts the frequency and independence of exceedances is also rejected.
+# This suggests that the model does not provide a well-specified VaR forecast.
