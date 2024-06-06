@@ -1,5 +1,6 @@
 rm(list = ls())
-lapply(c("car", "lmtest", "sandwich", "tseries", "quantmod", "PortfolioAnalytics", "ROI.plugin.quadprog", "readxl", "zoo", "vrtest", "forecast", "FinTS", "moments", "rugarch"), library, character.only = TRUE)
+#install.packages("GRS.test")
+lapply(c("car", "lmtest", "sandwich", "tseries", "quantmod", "PortfolioAnalytics", "ROI.plugin.quadprog", "readxl", "zoo", "vrtest", "forecast", "FinTS", "moments", "rugarch", "GRS.test"), library, character.only = TRUE)
 
 # Predictability of Asset Returns
 
@@ -139,23 +140,116 @@ roll1
 VaR1 <- roll1@forecast$VaR[,1]  # Extract the 5% VaR forecasts
 VaR1
 
-# Set up rolling forecast for the second model
+# Set up rolling forecast for the second model. 
 roll2 <- ugarchroll(spec2, data = logrets_ts, n.ahead = 1, forecast.length = (length(logrets_ts) - 300), refit.window = "recursive", solver = "hybrid")
 roll2
 
-# Extract VaR forecasts for the second model at 5%
-VaR2 <- roll2@forecast$VaR[,1]  # Extract the 5% VaR forecasts
+# Extracting VaR forecasts for the second model at 5%. 
+VaR2 <- roll2@forecast$VaR[,1]  # Extract the 5% VaR forecasts. 
 VaR2
 
-# Perform VaR test for the first model
-actual_returns <- tail(logrets_ts, length(VaR1))  # Get actual returns corresponding to VaR forecasts
+# Perform VaR test for the first model. 
+actual_returns <- tail(logrets_ts, length(VaR1))  # Get actual returns corresponding to VaR forecasts. 
 VaRTest(alpha = 0.05, actual = actual_returns, VaR = VaR1)
 # The unconditional coverage null hypothesis (H0) that the model correctly predicts the frequency of exceedances is rejected. 
 # The conditional coverage null hypothesis (H0) that the model correctly predicts the frequency and independence of exceedances is also rejected.
 # This suggests that the model does not provide a well-specified VaR forecast.
 
-# Perform VaR test for the second model
+# Perform VaR test for the second model. 
 VaRTest(alpha = 0.05, actual = actual_returns, VaR = VaR2)
 # The unconditional coverage null hypothesis (H0) that the model correctly predicts the frequency of exceedances is rejected. 
 # The conditional coverage null hypothesis (H0) that the model correctly predicts the frequency and independence of exceedances is also rejected.
 # This suggests that the model does not provide a well-specified VaR forecast.
+
+# Question 3.7
+# Reading the data. 
+factor <- read_excel("factordata.xlsx")
+
+# Converting all data into time series. 
+asset1_ts = ts(factor$asset1, start = 1, end = 1000, frequency = 1)
+asset2_ts = ts(factor$asset2, start = 1, end = 1000, frequency = 1)
+asset3_ts = ts(factor$asset3, start = 1, end = 1000, frequency = 1)
+factor1_ts = ts(factor$factor1, start = 1, end = 1000, frequency = 1)
+factor2_ts = ts(factor$factor2, start = 1, end = 1000, frequency = 1)
+
+# Plotting the data
+ts.plot(asset1_ts)
+ts.plot(asset2_ts)
+ts.plot(asset3_ts)
+ts.plot(factor1_ts)
+ts.plot(factor2_ts)
+
+# Fitting the linear regression model for asset1. 
+model1 <- lm(asset1_ts ~ factor1_ts + factor2_ts)
+summary(model1)
+# The p-value is less than 0.05, so we reject the null hypothesis. 
+
+# Question 3.8
+# Conducting diagnostics. 
+
+# Testing for autocorrelation in the residuals. 
+# Ljung-Box test. 
+Box.test(model1$residuals, lag = 10*log10(length(asset1_ts)), type = "Ljung-Box")
+# The p-value(0.6848) is greater than 0.05, so we do not reject the null hypothesis. 
+# This suggests that the residuals are white noise. 
+
+# Breusch-Godfrey test.  
+bgtest(model1, order = 12)
+# The p-value(0.5776) is above 0.05, so we do not reject the null hypothesis.  
+# This suggests that there is no autocorrelation in the model. 
+
+# Testing for normality in the residuals.
+# Jarque-Bera test.
+jarque.bera.test(model1$residuals)
+# The p-value(0.5336) is above 0.05, so we do not reject the null hypothesis.
+# This suggests that the residuals are normally distributed.
+
+# Testing for ARCH effects in the residuals. 
+# ARCH-LM test.
+ArchTest(model1$residuals, lags = 12) 
+# The p-value(0.7839) is above 0.05, so we do not reject the null hypothesis. 
+# This suggest ARCH effects in the residuals. 
+
+# Question 3.10
+# Conducting the GRS test
+GRS.test(factor[,1], factor[,4:5])
+# The p-value(0.4092949) is above 0.05, so we can not reject the null hypothesis.
+# This suggests that the factors are jointly significant in explaining the returns of asset1.
+
+# Question 3.11
+# Building the linear regression models for asset2 and asset3
+model2 <- lm(asset2_ts ~ factor1_ts + factor2_ts)
+model3 <- lm(asset3_ts ~ factor1_ts + factor2_ts)
+
+# Extracting the residuals from each model
+residuals1 <- model1$residuals
+residuals2 <- model2$residuals
+residuals3 <- model3$residuals
+
+# Combining the residuals into a matrix
+residuals_matrix <- cbind(residuals1, residuals2, residuals3)
+
+# Creating the variance-covariance matrix of model1, model2, and model3 residuals. 
+var_cov_matrix <- cov(residuals_matrix)
+var_cov_matrix
+
+# Question 3.12. 
+# Calculating the minimum variance portfolio weights. 
+# Creating a vector of ones (ι). 
+ones <- rep(1, ncol(var_cov_matrix))
+# Calculating the inverse of the variance-covariance matrix (Ω^-1). 
+inv_var_cov_matrix <- solve(var_cov_matrix)
+# Calculating the minimum variance portfolio weights (w). 
+weights <- inv_var_cov_matrix %*% ones / as.numeric(t(ones) %*% inv_var_cov_matrix %*% ones)
+weights
+
+# Calculating portfolio returns. 
+portfolio_returns <- as.matrix(factor[, 1:3]) %*% weights
+
+# Calculating the mean and standard deviation of the portfolio returns. 
+mu_p <- mean(portfolio_returns)
+sigma_p <- sd(portfolio_returns)
+
+# Calculating the 5% VaR. 
+VaR_5 <- mu_p + qnorm(0.05) * sigma_p
+VaR_5
