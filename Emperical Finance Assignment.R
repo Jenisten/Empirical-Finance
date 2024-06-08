@@ -91,8 +91,6 @@ Lo.Mac(logrets_sq,kvec_2)
 
 # Question 2.9
 # Conducting the ARCH-LM test
-ArchTest(logrets_sq, lags = 4, demean = TRUE)
-ArchTest(logrets_sq, lags = 8, demean = TRUE)
 ArchTest(logrets_sq, lags = 12, demean = TRUE)
 # The p-values are less than 0.05, so we reject the null hypothesis.
 # This suggests that the time series is not homoscedastic. 
