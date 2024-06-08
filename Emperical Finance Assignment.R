@@ -161,6 +161,7 @@ VaRTest(alpha = 0.05, actual = actual_returns, VaR = VaR2)
 # The conditional coverage null hypothesis (H0) that the model correctly predicts the frequency and independence of exceedances is also rejected.
 # This suggests that the model does not provide a well-specified VaR forecast.
 
+
 # Question 3.7
 # Reading the data. 
 factor <- read_excel("factordata.xlsx")
