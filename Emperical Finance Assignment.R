@@ -99,24 +99,25 @@ ArchTest(logrets_sq, lags = 12, demean = TRUE)
 Acf(logrets_sq, lag= logrets_lags, main="ACF of Log Returns Squared")
 
 # Questiion 2.11
-# Creating the first model: ARMA(0,0) with Gaussian distribution and non-zero mean. 
+# Creating the first model: ARMA(0,0)-GARCH(1,1) with Gaussian distribution and non-zero mean. 
 # Creating specification. 
 spec1 <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1, 1)), 
                     mean.model = list(armaOrder = c(0, 0), include.mean = TRUE ), 
                     distribution.model = "norm")
-Fitting the model using data. 
-model1 <- ugarchfit(spec1, logrets_ts, main="ARMA(0,0) with Gaussian distribution and non-zero mean.")
+# Fitting the model using data. 
+model1 <- ugarchfit(spec1, logrets_ts)
 # Printing results. 
 print(model1)
-plot(model1@fit$sigma, type='l')
+plot(model1@fit$sigma, type='l', main="ARMA(0,0)-GARCH(1,1) with Gaussian distribution and zero mean.")
 
-# Creating the Second model: ARMA(0,0) with student-t distribution and zero mean. 
+# Creating the Second model: ARMA(0,0)-GARCH(1,1) with student-t distribution and zero mean. 
 spec2 <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1, 1)), 
                     mean.model = list(armaOrder = c(0, 0), include.mean = TRUE ), 
                     distribution.model = "std")
 # Fitting the model using data. 
-model2 <- ugarchfit(spec2, logrets_ts, main="ARMA(0,0) with student-t distribution and zero mean.")
+model2 <- ugarchfit(spec2, logrets_ts)
 print(model2)
+plot(model2@fit$sigma, type='l', main="ARMA(0,0)-GARCH(1,1) with student-t distribution and zero mean.")
 
 # Question 2.12
 # Comparing the in fit sample of both models. 
