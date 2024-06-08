@@ -104,8 +104,8 @@ Acf(logrets_sq, lag= logrets_lags, main="ACF of Log Returns Squared")
 spec1 <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1, 1)), 
                     mean.model = list(armaOrder = c(0, 0), include.mean = TRUE ), 
                     distribution.model = "norm")
-# Fitting the model using data. 
-model1 <- ugarchfit(spec1, logrets_ts)
+Fitting the model using data. 
+model1 <- ugarchfit(spec1, logrets_ts, main="ARMA(0,0) with Gaussian distribution and non-zero mean.")
 # Printing results. 
 print(model1)
 plot(model1@fit$sigma, type='l')
@@ -115,7 +115,7 @@ spec2 <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1, 1)
                     mean.model = list(armaOrder = c(0, 0), include.mean = TRUE ), 
                     distribution.model = "std")
 # Fitting the model using data. 
-model2 <- ugarchfit(spec2, logrets_ts)
+model2 <- ugarchfit(spec2, logrets_ts, main="ARMA(0,0) with student-t distribution and zero mean.")
 print(model2)
 
 # Question 2.12
