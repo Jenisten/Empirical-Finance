@@ -92,7 +92,7 @@ Lo.Mac(logrets_sq,kvec_2)
 # Conducting the ARCH-LM test. 
 ArchTest(logrets_sq, lags = 12, demean = TRUE)
 # The p-values are less than 0.05, so we reject the null hypothesis.
-# This suggests that the time series is not homoscedastic. 
+# This suggests that there are ARCH effects present in squared log returns. 
 
 # Questiion 2.10
 # Plotting the ACF of the log returns squared. 
