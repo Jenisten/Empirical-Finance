@@ -119,6 +119,29 @@ model2 <- ugarchfit(spec2, logrets_ts)
 print(model2)
 plot(model2@fit$sigma, type='l', main="ARMA(0,0)-GARCH(1,1) with student-t distribution and zero mean.")
 
+# Extracting squared standardized residuals. 
+resid1_sq <- residuals(model1, standardize = TRUE)^2
+resid2_sq <- residuals(model2, standardize = TRUE)^2
+
+# Plotting the ACF and PACF for the squared standardized residuals of the first model. 
+par(mfrow = c(2, 2))
+Acf(resid1_sq, main="ACF of Squared Residuals - Gaussian")
+Pacf(resid1_sq, main="PACF of Squared Residuals - Gaussian")
+
+# Plotting the ACF and PACF for the squared standardized residuals of the second model. 
+Acf(resid2_sq, main="ACF of Squared Residuals - Student-t")
+Pacf(resid2_sq, main="PACF of Squared Residuals - Student-t")
+
+# Conducting Ljung-Box test for the first model. 
+lb_model1 <- Box.test(resid1_sq, lag = 12, type = "Ljung-Box")
+print(lb_model1)
+# The p-value (0.9566) is above 0.05, so we do not reject the null hypothesis.
+
+# Conducting Ljung-Box test for the second model. 
+lb_model2 <- Box.test(resid2_sq, lag = 12, type = "Ljung-Box")
+print(lb_model2)
+# The p-value (0.9527) is above 0.05, so we do not reject the null hypothesis.
+
 # Question 2.12
 # Comparing the in fit sample of both models. 
 infocriteria(model1)
