@@ -304,18 +304,15 @@ ones <- rep(1, ncol(omega))
 inv_omega <- solve(omega)
 
 # Calculating the minimum variance portfolio weights (w). 
-weights <- inv_omega %*% ones / (t(ones) %*% inv_omega %*% ones)
+weights <- inv_omega %*% ones / as.numeric(t(ones) %*% inv_omega %*% ones)
 weights
 
 # Calculating portfolio returns. 
 portfolio_returns <- as.matrix(factor[, 1:3]) %*% weights
-portfolio_returns
 
 # Calculating the mean and standard deviation of the portfolio returns. 
 mu_p <- mean(portfolio_returns)
 sigma_p <- sd(portfolio_returns)
-mu_p
-sigma_p
 
 # Calculating the 5% VaR. 
 VaR_5 <- mu_p + qnorm(0.05) * sigma_p
