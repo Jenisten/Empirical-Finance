@@ -240,7 +240,7 @@ GRS.test(factor[,1], factor[,4:5])
 # The p-value(0.4092949) is above 0.05, so we can not reject the null hypothesis.
 # This suggests that the factors are jointly significant in explaining the returns of asset1.
 
-# Question 3.11
+# Question 3.11 
 # Building the linear regression models for asset2 and asset3. 
 model2 <- lm(asset2_ts ~ factor1_ts + factor2_ts)
 model3 <- lm(asset3_ts ~ factor1_ts + factor2_ts)
@@ -250,12 +250,21 @@ residuals1 <- model1$residuals
 residuals2 <- model2$residuals
 residuals3 <- model3$residuals
 
-# Combining the residuals into a matrix. 
-residuals_matrix <- cbind(residuals1, residuals2, residuals3)
+# Creating a matrix of betas from each model, removing the intercepts from the matrix and transposing it. 
+betas_matrix <- t(sapply(list(model1, model2, model3), function(x) coef(x)[-1]))
+betas_matrix
 
-# Creating the variance-covariance matrix of model1, model2, and model3 residuals. 
-var_cov_matrix <- cov(residuals_matrix)
-var_cov_matrix
+# Creating a variance-covariance matrix of the factors. 
+var_cov_matrix_f <- cov(factor[, 4:5])
+var_cov_matrix_f
+
+# Creating the variance-covariance matrix of model1, model2, and model3 residuals and removing the off-diagonal elements from the variance-covariance matrix. 
+D_matrix <- diag(c(var(residuals1), var(residuals2), var(residuals3)))
+D_matrix
+
+# Calculating the omega matrix. 
+omega <- betas_matrix %*% var_cov_matrix_f %*% t(betas_matrix)+D_matrix
+omega
 
 # Question 3.12. 
 # Calculating the minimum variance portfolio weights. 
