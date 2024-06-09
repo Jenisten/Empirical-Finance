@@ -12,10 +12,10 @@ print(head(exchange))
 ts.plot(exchange)
 
 # Converting the data into a time series. 
-exchange_ts = ts(exchange$logreturn, start = 1, end = 262, frequency = 1)
+exchange_ts <- ts(exchange$logreturn, start = 1, end = 262, frequency = 1)
 
 # Determining the amount of lags. 
-exchange_lags=10*log10(length(exchange_ts))
+exchange_lags <- 10*log10(length(exchange_ts))
 print(exchange_lags)
 
 # Testing linear predictability with a Ljung Box test. 
@@ -39,7 +39,7 @@ Acf(exchange_ts, lag= exchange_lags, main="ACF of Exchange Rate")
 
 # Question 1.9
 # Plotting the PACF of the exchange rate. 
-pacf(exchange_ts, lag= exchange_lags, main="PACF of Exchange Rate")
+Pacf(exchange_ts, lag= exchange_lags, main="PACF of Exchange Rate")
 # The PACF plot shows that the partial autocorrelation is significant at lag 23. 
 
 # Question 1.10
@@ -64,15 +64,15 @@ Box.test(BM_fit$residuals, lag = exchange_lags, type = "Ljung-Box")
 logrets <- read_excel("logreturns.xlsx")
 
 # Converting the data into a time series. 
-logrets_ts = ts(logrets$logreturns, start = 1, end = 1000, frequency = 1)
+logrets_ts <- ts(logrets$logreturns, start = 1, end = 1000, frequency = 1)
 
 # Squaring Log returns. 
 logrets_sq <- logrets_ts^2
 
 # Determining the amount of lags. 
-logrets_lenght = length(logrets_ts)
+logrets_lenght <- length(logrets_ts)
 logrets_lenght
-logrets_lags=10*log10(logrets_lenght)
+logrets_lags <- 10*log10(logrets_lenght)
 print(logrets_lags)
 
 # Testing for linear predictability with a Ljung Box test. 
