@@ -36,7 +36,7 @@ Lo.Mac(exchange_ts,kvec)
 # Plotting the ACF of the exchange rate. 
 Acf(exchange_ts, lag = exchange_lags, main="ACF of Exchange Rate")
 # The ACF plot shows that the autocorrelation is significant at lag 18 and 23.
-# Save the plot to a PNG file with specified dimensions
+# Saving the plot to a PNG file with specified dimensions
 png("acf_plot_1.8.png", width = 800, height = 400)
 Acf(exchange_ts, lag = exchange_lags, main="ACF of Exchange Rate")
 dev.off()
@@ -45,7 +45,7 @@ dev.off()
 # Plotting the PACF of the exchange rate. 
 Pacf(exchange_ts, lag = exchange_lags, main="PACF of Exchange Rate")
 # The PACF plot shows that the partial autocorrelation is significant at lag 23. 
-# Save the plot to a PNG file with specified dimensions
+# Saving the plot to a PNG file with specified dimensions
 png("pacf_plot_1.9.png", width = 800, height = 400)
 Pacf(exchange_ts, lag = exchange_lags, main="PACF of Exchange Rate")
 dev.off()
@@ -105,7 +105,7 @@ ArchTest(logrets_sq, lags = 12, demean = TRUE)
 # Questiion 2.10
 # Plotting the ACF of the log returns squared. 
 Acf(logrets_sq, lag= logrets_lags, main="ACF of Log Returns Squared")
-# Save the plot to a PNG file with specified dimensions
+# Saving the plot to a PNG file with specified dimensions
 png("acf_plot_2.10.png", width = 800, height = 400)
 Acf(logrets_sq, lag= logrets_lags, main="ACF of Log Returns Squared")
 dev.off()
@@ -143,7 +143,7 @@ Pacf(resid1_sq, main="PACF of Squared Residuals - Gaussian")
 # Plotting the ACF and PACF for the squared standardized residuals of the second model. 
 Acf(resid2_sq, main="ACF of Squared Residuals - Student-t")
 Pacf(resid2_sq, main="PACF of Squared Residuals - Student-t")
-# Save the plots to a PNG file with specified dimensions
+# Saving the plots to a PNG file with specified dimensions
 png("plots_2.11.png", width = 800, height = 400)
 par(mfrow = c(2, 2))
 Acf(resid1_sq, main="ACF of Squared Residuals - Gaussian")
@@ -241,7 +241,7 @@ Box.test(model1$residuals, lag = 10*log10(length(asset1_ts)), type = "Ljung-Box"
 # Plotting the ACF of the residuals.
 par(mfrow = c(1,1))
 Acf(model1$residuals, lag = 10*log10(length(asset1_ts)), main="ACF of Residuals")
-# Save the plot to a PNG file with specified dimensions
+# Saving the plot to a PNG file with specified dimensions
 png("acf_plot_3.8.png", width = 800, height = 400)
 Acf(model1$residuals, lag = 10*log10(length(asset1_ts)), main="ACF of Residuals")
 dev.off()
