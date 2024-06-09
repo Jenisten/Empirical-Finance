@@ -45,7 +45,7 @@ pacf(exchange_ts, lag= exchange_lags, main="PACF of Exchange Rate")
 # Question 1.10
 # Determining the best time series model using the auto.arima function. 
 auto.arima(exchange_ts, d=0, D=0, ic=c("aic"), stepwise=FALSE, approximation=FALSE)
-# Based on the BIC criterion, the best model is ARIMA(3,0,1) with a zero mean.
+# Based on the AIC criterion, the best model is ARIMA(3,0,1) with a zero mean.
 auto.arima(exchange_ts, d=0, D=0, ic=c("bic"), stepwise=FALSE, approximation=FALSE)
 # Based on the BIC criterion, the best model is ARIMA(0,0,0) with a zero mean.
 
