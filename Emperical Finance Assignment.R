@@ -217,6 +217,7 @@ factor1_ts = ts(factor$factor1, start = 1, end = 1000, frequency = 1)
 factor2_ts = ts(factor$factor2, start = 1, end = 1000, frequency = 1)
 
 # Plotting the data. 
+par(mfrow = c(3,2))
 ts.plot(asset1_ts)
 ts.plot(asset2_ts)
 ts.plot(asset3_ts)
@@ -236,6 +237,14 @@ summary(model1)
 Box.test(model1$residuals, lag = 10*log10(length(asset1_ts)), type = "Ljung-Box")
 # The p-value(0.6848) is greater than 0.05, so we do not reject the null hypothesis. 
 # This suggests that the residuals are white noise. 
+
+# Plotting the ACF of the residuals.
+par(mfrow = c(1,1))
+Acf(model1$residuals, lag = 10*log10(length(asset1_ts)), main="ACF of Residuals")
+# Save the plot to a PNG file with specified dimensions
+png("acf_plot_3.8.png", width = 800, height = 400)
+Acf(model1$residuals, lag = 10*log10(length(asset1_ts)), main="ACF of Residuals")
+dev.off()
 
 # Breusch-Godfrey test.  
 bgtest(model1, order = 12)
